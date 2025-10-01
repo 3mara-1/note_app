@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:note_app/features/presentation/widgets/custom_buttom.dart';
-import 'package:note_app/features/presentation/widgets/custum_form_field.dart';
+import 'package:note_app/features/presentation/auth/widgets/custom_buttom.dart';
+import 'package:note_app/features/presentation/auth/widgets/custum_form_field.dart';
 import 'package:note_app/vallidator.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -35,7 +35,7 @@ class _RegisterState extends State<Register> {
     final colorStyle = Theme.of(context).colorScheme;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: colorStyle.background,
+        backgroundColor: colorStyle.surface,
         body: Center(
           child: Padding(
             padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
@@ -52,7 +52,7 @@ class _RegisterState extends State<Register> {
                   labelStyle: textStyle.labelMedium,
                   fillColor:colorStyle.primary,
                 ),
-                CustomButton(),
+                CustomButton(name: namecontroller.text, imagePath: _image?.path,),
               ],
             ),
           ),

@@ -15,7 +15,7 @@ class AppTheme {
   static ThemeData lightTheme() {
     return ThemeData(
       colorScheme: ColorScheme.light(
-        background: bgColor,
+        surface: bgColor,
         primary: primary,
         primaryContainer: scondary,
       ),

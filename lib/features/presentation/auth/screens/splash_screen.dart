@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class SplashScreen extends StatefulWidget {
-  SplashScreen({super.key});
+  const SplashScreen({super.key});
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final textStyle = Theme.of(context).textTheme;
     final colorStyle = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: colorStyle.background,
+      backgroundColor: colorStyle.surface,
       body: SafeArea(
         child: Center(
           child: Text(

@@ -36,10 +36,10 @@ class CustomFormField extends StatelessWidget {
         decoration: InputDecoration(
           filled: true,
           fillColor: fillColor,
-          hintText: hintText ?? null,
-          labelText: labelText ?? null,
-          labelStyle: labelStyle ?? null,
-          hintStyle: hintStyle ?? null,
+          hintText: hintText,
+          labelText: labelText,
+          labelStyle: labelStyle,
+          hintStyle: hintStyle,
           helperText: '',
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),

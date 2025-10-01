@@ -5,6 +5,6 @@ class User extends HiveObject {
   @HiveField(0)
   final String name;
   @HiveField(1)
-  final String profilPic;
+  final String ?profilPic;
   User(this.name,this.profilPic);
 }
