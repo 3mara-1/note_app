@@ -2,39 +2,63 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:note_app/features/presentation/auth/cubit/auth_cubit.dart';
-import 'package:note_app/features/presentation/auth/model/user_model.dart';
+import 'package:note_app/features/presentation/auth/cubit/auth_state.dart';
 
 class CustomButton extends StatelessWidget {
-  CustomButton({super.key, required this.name, this.imagePath});
-  String name;
-  String? imagePath;
+  const CustomButton({
+    super.key,
+    required this.name,
+    this.imagePath,
+    required this.formKey,
+  });
+
+  final String name;
+  final String? imagePath;
+  final GlobalKey<FormState> formKey;
 
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme;
     final colorStyle = Theme.of(context).colorScheme;
-
-    return BlocBuilder<AuthCubit, AuthState>(
+    
+    return BlocConsumer<UserCubit, UserState>(
+      listener: (context, state) {
+        if (state is UserLoaded) {
+          context.go('/home');
+        } else if (state is UserError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
       builder: (context, state) {
+        final isLoading = state is UserLoading;
+        
         return ElevatedButton(
-          onPressed: () {
-            if (name.isNotEmpty) {
-              final userToLogin = User(name, imagePath);
-              context.read<AuthCubit>().updateUser(userToLogin);
-              context.go('/home');
-              print(name.toString() + '' + imagePath.toString());
-            } else {}
+          onPressed: isLoading ? null : () async {
+            if (formKey.currentState?.validate() ?? false) {
+              await context.read<UserCubit>().loginUser(
+                name: name,
+                profilPic: imagePath,
+              );
+            }
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: colorStyle.primaryContainer,
-            minimumSize: Size(330, 60),
+            minimumSize: const Size(330, 60),
             elevation: 0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
-              side: BorderSide(width: 2),
+              side: const BorderSide(width: 2),
             ),
           ),
-          child: Text('get started', style: textStyle.bodyLarge),
+          child: isLoading
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : Text('Get Started', style: textStyle.bodyLarge),
         );
       },
     );

@@ -1,17 +1,19 @@
-part of 'auth_cubit.dart';
+import 'package:note_app/features/presentation/auth/model/user_model.dart';
 
+abstract class UserState {}
 
-sealed class AuthState {}
+class UserInitial extends UserState {}
 
-final class AuthInitial extends AuthState {}
+class UserLoading extends UserState {}
 
-class AuthLoading extends AuthState {} // حالة الانتظار عند الضغط على تسجيل الدخول
-class AuthLoaded extends AuthState {} // حالة الانتظار عند الضغط على تسجيل الدخول
-class AuthSuccess extends AuthState { // حالة النجاح بعد تسجيل الدخول
+class UserLoaded extends UserState {
   final User user;
-  AuthSuccess(this.user);
+  UserLoaded(this.user);
 }
-class AuthFailure extends AuthState { // حالة الفشل
-  final String error;
-  AuthFailure(this.error);
+
+class UserEmpty extends UserState {}
+
+class UserError extends UserState {
+  final String message;
+  UserError(this.message);
 }
