@@ -71,7 +71,7 @@ class _RegisterState extends State<Register> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    spacing: 35,
+                    spacing: 38,
                     children: [
                       _buildProfilePic(),
                       CustomFormField(

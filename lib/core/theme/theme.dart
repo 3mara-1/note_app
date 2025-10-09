@@ -3,15 +3,10 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  static Color bgColor = Color(0xFFF9EBD5);
-  static Color primary = Color.fromARGB(255, 239, 210, 160);
+  static Color bgColor = Color(0xFFFfffff);
+  static Color primary = Color(0xFFEFD2A0);
   static Color scondary = Color(0xFFFFBE9E);
-  static List<Color> cardColors = [
-    Color(0xFFF8E4C5),
-    Color(0xFFF8E4C5),
-    Color(0xFFF8E4C5),
-    Color(0xFFF8E4C5),
-  ];
+
   static ThemeData lightTheme() {
     return ThemeData(
       colorScheme: ColorScheme.light(

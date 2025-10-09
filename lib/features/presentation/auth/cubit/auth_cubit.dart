@@ -46,7 +46,6 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  // تحديث بيانات المستخدم
   Future<void> updateUser({
     String? name,
     String? profilPic,
@@ -70,7 +69,6 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  // تسجيل الخروج
   Future<void> logoutUser() async {
     try {
       emit(UserLoading());
@@ -81,7 +79,6 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  // التحقق من حالة تسجيل الدخول
   bool get isLoggedIn {
     final currentState = state;
     return currentState is UserLoaded && currentState.user.isLoggedIn;

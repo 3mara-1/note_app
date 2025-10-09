@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _checkUserStatus() {
-    Timer(const Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 4), () {
       final userState = context.read<UserCubit>().state;
       
       if (userState is UserLoaded && userState.user.isLoggedIn) {
@@ -49,7 +49,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 style: textStyle.headlineLarge,
               ),
               const SizedBox(height: 20),
-              const CircularProgressIndicator(),
             ],
           ),
         ),

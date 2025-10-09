@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:note_app/features/presentation/auth/cubit/auth_cubit.dart';
 import 'package:note_app/features/presentation/auth/cubit/auth_state.dart';
 import 'package:note_app/features/presentation/home/cubit/note_cubit.dart';
 import 'package:note_app/features/presentation/home/cubit/note_state.dart'; // ✅ إضافة
 import 'package:note_app/features/presentation/home/widgets/add_note_button.dart';
+import 'package:note_app/features/presentation/home/widgets/custom_drawer.dart';
 import 'package:note_app/features/presentation/home/widgets/note_Item.dart';
 
 class Home extends StatelessWidget {
@@ -18,43 +20,47 @@ class Home extends StatelessWidget {
     final colorStyle = Theme.of(context).colorScheme;
     return SafeArea(
       child: Scaffold(
+        drawer: ProfileDrawer(),
         appBar: AppBar(
-          toolbarHeight: 86,
+          toolbarHeight: 80,
           shape: const RoundedRectangleBorder(
             side: BorderSide(width: 2.5),
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
           ),
-          backgroundColor: colorStyle.primaryContainer.withOpacity(0.7),
+          automaticallyImplyLeading: false, 
+          backgroundColor: colorStyle.primaryContainer,
           title: BlocBuilder<UserCubit, UserState>(
-            // ✅ تصحيح الاسم
             builder: (context, state) {
-              // حالة تحميل المستخدم
               if (state is UserLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              // حالة نجاح تحميل المستخدم
               if (state is UserLoaded) {
-                // ✅ تصحيح الاسم
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    CircleAvatar(
-                      radius: MediaQuery.of(context).size.height * 0.032,
-                      backgroundColor: const Color.fromARGB(255, 255, 94, 0),
+                    InkWell(
+                      onTap: () {
+                        Scaffold.of(context).openDrawer();
+                      },
                       child: CircleAvatar(
-                        backgroundImage: state.user.profilPic != null
-                            ? FileImage(File(state.user.profilPic!))
-                            : null,
-                        backgroundColor: colorStyle.primary,
-                        radius: MediaQuery.of(context).size.height * 0.027,
-                        child: state.user.profilPic == null
-                            ? Icon(
-                                Icons.person,
-                                color: const Color.fromARGB(255, 0, 0, 0),
-                                size: MediaQuery.of(context).size.height * 0.04,
-                              )
-                            : null,
+                        radius: MediaQuery.of(context).size.height * 0.032,
+                        backgroundColor: const Color.fromARGB(255, 255, 94, 0),
+                        child: CircleAvatar(
+                          backgroundImage: state.user.profilPic != null
+                              ? FileImage(File(state.user.profilPic!))
+                              : null,
+                          backgroundColor: colorStyle.primary,
+                          radius: MediaQuery.of(context).size.height * 0.027,
+                          child: state.user.profilPic == null
+                              ? Icon(
+                                  Icons.person,
+                                  color: const Color.fromARGB(255, 0, 0, 0),
+                                  size:
+                                      MediaQuery.of(context).size.height * 0.04,
+                                )
+                              : null,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -67,7 +73,6 @@ class Home extends StatelessWidget {
                 );
               }
 
-              // حالة فارغة أو خطأ
               return const Text('Guest');
             },
           ),
@@ -75,15 +80,11 @@ class Home extends StatelessWidget {
 
         body: BlocBuilder<NoteCubit, NoteState>(
           builder: (context, state) {
-            // --- حالة التحميل ---
             if (state is NoteLoading) {
               return const Center(child: CircularProgressIndicator());
             }
 
-            // --- حالة النجاح ---
             if (state is NoteLoaded) {
-              // ✅ تصحيح الاسم
-              // لو لا توجد ملاحظات، اعرض رسالة
               if (state.notes.isEmpty) {
                 return Center(
                   child: Text(
@@ -93,15 +94,11 @@ class Home extends StatelessWidget {
                 );
               }
 
-              // لو توجد ملاحظات، اعرض GridView
-              return GridView.builder(
+              return MasonryGridView.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
                 padding: const EdgeInsets.all(16),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // عدد الأعمدة
-                  crossAxisSpacing: 16, // المسافة الأفقية
-                  mainAxisSpacing: 16, // المسافة الرأسية
-                  childAspectRatio: 0.75, // ✅ إضافة نسبة مناسبة
-                ),
                 itemCount: state.notes.length,
                 itemBuilder: (context, index) {
                   final note = state.notes[index];
@@ -110,14 +107,12 @@ class Home extends StatelessWidget {
               );
             }
 
-            // --- حالة الخطأ ---
             if (state is NoteError) {
-              // ✅ تصحيح الاسم
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Error: ${state.message}'), // ✅ تصحيح الاسم
+                    Text('Error: ${state.message}'),
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () {
@@ -130,7 +125,6 @@ class Home extends StatelessWidget {
               );
             }
 
-            // --- الحالة الأولية ---
             return const Center(child: Text('Welcome!'));
           },
         ),

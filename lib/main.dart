@@ -11,23 +11,19 @@ import 'package:note_app/features/presentation/home/cubit/note_cubit.dart';
 import 'package:note_app/features/presentation/home/model/note_model.dart';
 
 void main() async {
-  // ✅ إضافة هذا السطر المهم
   WidgetsFlutterBinding.ensureInitialized();
   
-  // تهيئة Hive
   await Hive.initFlutter();
   
-  // تسجيل المحولات
   Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(NoteAdapter());
   
-  // فتح الصناديق
   await Hive.openBox<User>('users');
   await Hive.openBox<Note>('notes');
   
-  // ✅ استدعاء runApp
   runApp(
     const AppProviders(
+      
       child: MyApp(),
     ),
   );

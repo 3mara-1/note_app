@@ -1,6 +1,7 @@
 // ملف: note_item.dart (مثال)
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_app/features/presentation/home/cubit/note_cubit.dart';
 import 'package:note_app/features/presentation/home/model/note_model.dart';
@@ -13,9 +14,10 @@ class NoteItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
+    final colorStyle = Theme.of(context).colorScheme;
     return Container(
-      padding: const EdgeInsets.all(16),
-      // استخدم اللون المحفوظ في الملاحظة كخلفية
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Color(note.color), // تحويل الـ int المحفوظ إلى Color
         borderRadius: BorderRadius.only(
@@ -26,32 +28,30 @@ class NoteItem extends StatelessWidget {
         border: Border.all(width: 2.5),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 10,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             note.title,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+            style: textStyle.bodyLarge,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 12),
+
           // محتوى الملاحظة
-          Expanded(
-            child: Text(
-              note.body,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black.withOpacity(0.7),
-              ),
-              overflow: TextOverflow.fade,
-            ),
+          Text(
+            note.body,
+            style: textStyle.bodyMedium,
+            overflow: TextOverflow.fade,
           ),
-          Text(note.date.toString()),
+
+          Text(
+            DateFormat('hh:mm a').format(note.date),
+            style: textStyle.bodySmall,
+          ),
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               EditNote(note: note),
               Spacer(),

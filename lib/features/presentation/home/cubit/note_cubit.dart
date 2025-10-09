@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 import 'package:note_app/features/presentation/home/Repository/repository.dart';
 import 'package:note_app/features/presentation/home/model/note_model.dart';
 import 'note_state.dart';
@@ -9,18 +8,16 @@ class NoteCubit extends Cubit<NoteState> {
 
   NoteCubit(this._repository) : super(NoteInitial());
 
-  // جلب كل الملاحظات
   void loadNotes() {
     try {
       emit(NoteLoading());
       final notes = _repository.getNotes();
       emit(NoteLoaded(notes));
     } catch (e) {
-      emit(NoteError('فشل تحميل الملاحظات: ${e.toString()}'));
+      emit(NoteError(' loading failure ${e.toString()}'));
     }
   }
 
-  // إضافة ملاحظة جديدة
   Future<void> addNote({
     required String title,
     required String body,
@@ -38,11 +35,10 @@ class NoteCubit extends Cubit<NoteState> {
       
       loadNotes();
     } catch (e) {
-      emit(NoteError('فشل إضافة الملاحظة: ${e.toString()}'));
+      emit(NoteError('Add note failure ${e.toString()}'));
     }
   }
 
- // في note_cubit.dart
 Future<void> updateNote({
   required Note note,
   String? title,
@@ -51,21 +47,18 @@ Future<void> updateNote({
 }) async {
   try {
     if (note.isInBox) {
-      // تحديث القيم مباشرة
       note.title = title ?? note.title;
       note.body = body ?? note.body;
       note.color = color ?? note.color;
       
-      // حفظ التعديلات
       await note.save();
       
-      // إعادة تحميل الملاحظات
       loadNotes();
     } else {
       emit(NoteError('Note not found in database'));
     }
   } catch (e) {
-    emit(NoteError('فشل تحديث الملاحظة: ${e.toString()}'));
+    emit(NoteError('reloding note failure ${e.toString()}'));
   }
 }
   // حذف ملاحظة
@@ -76,7 +69,7 @@ Future<void> updateNote({
       // إعادة تحميل الملاحظات
       loadNotes();
     } catch (e) {
-      emit(NoteError('فشل حذف الملاحظة: ${e.toString()}'));
+      emit(NoteError('remove note failure ${e.toString()}'));
     }
   }
 
@@ -97,11 +90,10 @@ Future<void> updateNote({
 
       emit(NoteLoaded(filteredNotes));
     } catch (e) {
-      emit(NoteError('فشل البحث: ${e.toString()}'));
+      emit(NoteError('Search failed ${e.toString()}'));
     }
   }
 
-  // ترتيب الملاحظات حسب التاريخ
   void sortNotesByDate({bool ascending = false}) {
     try {
       final notes = _repository.getNotes();
@@ -112,11 +104,10 @@ Future<void> updateNote({
       });
       emit(NoteLoaded(notes));
     } catch (e) {
-      emit(NoteError('فشل الترتيب: ${e.toString()}'));
+      emit(NoteError('Arrangement failed: ${e.toString()}'));
     }
   }
 
-  // الحصول على ملاحظة واحدة بالـ ID
   Note? getNoteById(String id) {
     final notes = _repository.getNotes();
     try {

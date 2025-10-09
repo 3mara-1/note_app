@@ -8,13 +8,13 @@ class Note extends HiveObject {
   final String id;
 
   @HiveField(1)
-  String title; // بدون final
+  String title;
 
   @HiveField(2)
-  String body; // بدون final
+  String body;
 
   @HiveField(3)
-  int color; // بدون final
+  int color; 
 
   @HiveField(4)
   final DateTime date;
